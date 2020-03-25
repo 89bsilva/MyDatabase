@@ -1,0 +1,17 @@
+{
+    "name": "89bsilva/my-database",
+    "description": "Para conexao e operacoes simples em base de dados MySQL",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bruno Silva Santana",
+            "email": "brunoss.789@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "^7.2"
+    },
+    "autoload": {
+        "files": ["MyDatabase.php"]
+    }
+}
