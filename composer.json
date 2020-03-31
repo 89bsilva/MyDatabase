@@ -12,6 +12,7 @@
         "php": "^7.2"
     },
     "autoload": {
-        "files": ["MyDatabase.php"]
+        "files": ["MyDatabase.php"],
+        "psr-4": {"CRUD\\": "./crud"}
     }
 }

@@ -1,2 +1,4 @@
-index.php
 vendor
+
+index.php
+composer.lock
