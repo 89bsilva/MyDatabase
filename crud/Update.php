@@ -56,7 +56,7 @@ class Update
      * Coloca a referência do objeto MyDatabase na propriedade $db
      * Indica qual(is) o(s) valor(es) que será(ão) atualizado(s)
      * 
-     * @param string  $data  Array associativo com o(s) valor(es) que será(ão) inserido(s)
+     * @param string  $table  String com o nome da tabela que deverá ser atualizada
      * @param MyDatabase  $mydatabase  Referencia do objeto que esta criando um novo objeto dessa classe
      */
     public function __construct(string $table, &$mydatabase)
@@ -90,12 +90,12 @@ class Update
     /**
      * Passa para propriedade $where a condição para realizar a atualização
      * 
-     * @param  string  $where  Condição para atualização
+     * @param  string  $conditions  Condição para atualização
      * @return Update  Retorna $this 
      */
-    public function where(string $where): Update
+    public function where(string $conditions): Update
     {
-        $this->where = $where;
+        $this->where = $conditions;
         return $this;
     } // FIM -> where
      

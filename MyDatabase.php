@@ -190,7 +190,7 @@ class MyDatabase
      * @return CRUD\Select
      */
 
-    public function select($column): CRUD\Select
+    public function select($column = "*"): CRUD\Select
     {
         $column = is_array($column) ? implode(", ", $column) : $column;
         return new CRUD\Select($column, $this);

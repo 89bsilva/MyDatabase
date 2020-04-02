@@ -1,6 +1,6 @@
 {
     "name": "89bsilva/my-database",
-    "description": "Para conexao e operacoes simples em base de dados MySQL",
+    "description": "Para conexão e operações simples em base de dados MySQL",
     "license": "MIT",
     "authors": [
         {

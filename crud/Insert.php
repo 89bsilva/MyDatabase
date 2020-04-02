@@ -138,7 +138,7 @@ class Insert
      * Passa para propriedade $table o nome da tabela em que a inserção será realizada
      * Monta na propriedade $statement o nome da tabela
      * 
-     * @param  string  $from  String com o host ou um Array associativo com o host e porta
+     * @param  string  $from  String com o nome da tabela em que a inserção será realizada
      * @return Insert  Retorna $this 
      */
     public function into(string $table): Insert

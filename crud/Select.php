@@ -62,25 +62,25 @@ class Select
      * Passa para propriedade $table o nome da tabela em que a consulta será realizada
      * Monta na propriedade $statement o nome da tabela
      * 
-     * @param  string  $from  String com o host ou um Array associativo com o host e porta
+     * @param  string  $table  String com o nome da tabela em que a consulta será realizada
      * @return Select  Retorna $this 
      */
-    public function from(string $from): Select
+    public function from(string $table): Select
     {
-        $this->table      = $from; 
-        $this->statement .= " FROM {$from}";
+        $this->table      = $table; 
+        $this->statement .= " FROM {$table}";
         return $this;
     } // FIM -> from
      
     /**
      * Monta a cláusula where na proprieda $statement
      *
-     * @param  string  $where  Condições necessária para montar a cláusula where
+     * @param  string  $conditions  Condições necessária para montar a cláusula where
      * @return Select  Retorna  $this 
      */
-    public function where(string $where): Select
+    public function where(string $conditions): Select
     {
-        $this->statement .= " WHERE {$where}";
+        $this->statement .= " WHERE {$conditions}";
         return $this;
     } // FIM -> where
      
@@ -99,14 +99,14 @@ class Select
     /**
      * Como deve ser ordenado a consulta.
      *
-     * @param  string  $order  Regra para ordenar
-     * @param  string  $ordination  Orientação da ordenação
+     * @param  string  $column  Regra para ordenar
+     * @param  string  $sort  Orientação da ordenação
      * @return Select  Retorna $this 
      */
-    public function order(string $order, $ordination = "ASC"): Select
+    public function order(string $column, string $sort = "ASC"): Select
     {
-        $ordination = strtoupper($ordination);
-        $this->order = "ORDER BY {$order} {$ordination}"; 
+        $ordination  = strtoupper($ordination) === "DESC" ? " DESC" : "";
+        $this->order = "ORDER BY {$column}{$ordination}"; 
         return $this;
     } // FIM -> order
      
