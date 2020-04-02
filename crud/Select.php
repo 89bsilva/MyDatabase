@@ -105,8 +105,8 @@ class Select
      */
     public function order(string $column, string $sort = "ASC"): Select
     {
-        $ordination  = strtoupper(sort) === "DESC" ? " DESC" : "";
-        $this->order = "ORDER BY {$column}{sort}"; 
+        $ordination  = strtoupper($sort) === "DESC" ? " DESC" : "";
+        $this->order = "ORDER BY {$column}{$sort}"; 
         return $this;
     } // FIM -> order
      
