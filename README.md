@@ -4,10 +4,10 @@ MyDatabase é uma clase com um CRUD para realizar consultas simples em MySQL
 
 ## Instalação
 
-Instale a versão de desenvolvimento
+Instale a versão de testes
 
 ```bash
-$ composer require 89bsilva/my-database:dev-master
+$ composer require 89bsilva/my-database:0.1-alpha
 ```
 
 ## Primeiro Passo
