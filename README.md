@@ -120,8 +120,8 @@ O método retornará instância da classe Select e através desse novo objeto de
 | isNull()                                     | Procura o valor NULL na coluna da consulta                                                | 
 | isNotNull()                                  | Procura valor DIFERENTE DE NULL na coluna da consulta                                     |
 | like(string $valor)                          | Utiliza operador LIKE e insere o coringa "%" antes e depois do valor. Ex.: %$valor%       |
-| likeStart(string $valor1, string $valor2)    | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
-| likeEnd(string $valor1, string $valor2)      | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
+| likeStart(string $valor)                     | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
+| likeEnd(string $valor)                       | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
 | likeStartEnd(string $valor1, string $valor2) | Utiliza operador LIKE e insere o coringa "%" entre valores. Ex.: $valor1%$valor2          |
 | limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 100    | 
 | order(string $coluna, string $sort)          | Nome(s) da(s) coluna(s) pela qual a consulta será ordenada; Direção da ordenação          |
@@ -163,8 +163,8 @@ O método retornará instância da classe Update e através desse novo objeto de
 | isNull()                                     | Procura o valor NULL na coluna da consulta                                                | 
 | isNotNull()                                  | Procura valor DIFERENTE DE NULL na coluna da consulta                                     |
 | like(string $valor)                          | Utiliza operador LIKE e insere o coringa "%" antes e depois do valor. Ex.: %$valor%       |
-| likeStart(string $valor1, string $valor2)    | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
-| likeEnd(string $valor1, string $valor2)      | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
+| likeStart(string $valor)                     | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
+| likeEnd(string $valor)                       | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
 | likeStartEnd(string $valor1, string $valor2) | Utiliza operador LIKE e insere o coringa "%" entre valores. Ex.: $valor1%$valor2          |
 | limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 100    |  
 | execute(): int                               | Executa o update, retorna um int com o número de linhas que a atualização afetou          | 
@@ -202,8 +202,8 @@ O método retornará instância da classe Delete e através desse novo objeto de
 | isNull()                                     | Procura o valor NULL na coluna da consulta                                                | 
 | isNotNull()                                  | Procura valor DIFERENTE DE NULL na coluna da consulta                                     |
 | like(string $valor)                          | Utiliza operador LIKE e insere o coringa "%" antes e depois do valor. Ex.: %$valor%       |
-| likeStart(string $valor1, string $valor2)    | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
-| likeEnd(string $valor1, string $valor2)      | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
+| likeStart(string $valor)                     | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
+| likeEnd(string $valor)                       | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
 | likeStartEnd(string $valor1, string $valor2) | Utiliza operador LIKE e insere o coringa "%" entre valores. Ex.: $valor1%$valor2          |
 | limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 100    |  
 | execute()                                    | Executa o delete, retorna um int com o número de linhas que o delete afetou               | 
