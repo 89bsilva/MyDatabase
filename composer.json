@@ -13,6 +13,6 @@
     },
     "autoload": {
         "files": ["MyDatabase.php"],
-        "psr-4": {"CRUD\\": "./crud"}
+        "psr-4": {"MyDatabase\\": "./"}
     }
 }

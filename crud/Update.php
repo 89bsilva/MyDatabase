@@ -5,53 +5,10 @@
  * @author Bruno Silva Santana <brunoss.789@gmail.com>
  */
 
-namespace CRUD;
+namespace MyDatabase\CRUD;
 
-class Update
+class Update extends \MyDatabase\Utils\Where
 {
-
-    /**
-     * Referencia do objeto MyDatabase.
-     *
-     * @property MyDatabase
-     */
-    private $db;
-
-    /**
-     * Declaração da consulta a base de dados.
-     *
-     * @property string
-     */
-    private $statement = "UPDATE ";
-
-    /**
-     * Limite para atualização.
-     *
-     * @property int
-     */
-    private $limit = 1;
-
-    /**
-     * Tabela alvo da consulta.
-     *
-     * @property string|bool
-     */
-    private $table = false;
-
-    /**
-     * Novo(s) dado(s) que será(ão) atualizado(s).
-     *
-     * @property array
-     */
-    private $values;
-
-    /**
-     * Condicão(ões) para indicar onde o(s) novo(s) valore(s) será(ão) inserido(s).
-     *
-     * @property string
-     */
-    private $where;
-
     /**
      * Coloca a referência do objeto MyDatabase na propriedade $db
      * Indica qual(is) o(s) valor(es) que será(ão) atualizado(s)
@@ -61,9 +18,11 @@ class Update
      */
     public function __construct(string $table, &$mydatabase)
     {
-        $this->db         = $mydatabase;
-        $this->statement .= "`{$table}` ";
-        $this->table      = $table;
+        parent::__construct("UPDATE", 1, $mydatabase);
+        
+        $this->table = $table;
+
+        $this->statement("`{$table}`");
     } // FIM -> __construct
      
     /**
@@ -75,42 +34,20 @@ class Update
      */
     public function set(array $data): Update
     {
+        $maskData     = $this->maskData($data);
+        $this->values = $maskData["values"];
+
         $set = Array();
-
-        foreach ($data as $column => $value) {
-            $set[] = "`{$column}` = ?";
+        $i   = 0;
+        foreach ($maskData["values"] as $bind => $value) {
+            $set[] = "{$maskData["keys"][$i]} = {$bind}";
+            $i++;
         }
-
         $set = implode(', ', $set);
-        $this->values     = array_values($data);
-        $this->statement .= "SET {$set}";
+        
+        $this->statement("SET {$set}");
         return $this;
     } // FIM -> set
-     
-    /**
-     * Passa para propriedade $where a condição para realizar a atualização
-     * 
-     * @param  string  $conditions  Condição para atualização
-     * @return Update  Retorna $this 
-     */
-    public function where(string $conditions): Update
-    {
-        $this->where = $conditions;
-        return $this;
-    } // FIM -> where
-     
-
-    /**
-     * Passa para a propriedade $limit um novo limite para consulta.
-     *
-     * @param  int  $limit  Novo limite para consulta
-     * @return Update  Retorna $this 
-     */
-    public function limit(int $limit): Update
-    {
-        $this->limit = $limit; 
-        return $this;
-    } // FIM -> limit
      
     /**
      * Executa a atualização
@@ -119,19 +56,23 @@ class Update
      */
     public function execute(): int
     {
-        if (!$this->where || !$this->values) {
+        if (
+            (!$this->where || !$this->where['complete']) 
+            || !$this->values) {
             return 0;
         }
+        $where = $this->getWhere();
 
-        $this->statement .= " WHERE {$this->where}";
-        $this->statement .= $this->limit > 0 ? " LIMIT {$this->limit}" : "";
-        $query = $this->db->prepareStatement($this->statement);
+        $this->statement("{$where} {$this->limit}");
+
+        $query = $this->prepare();
         if ($query) {
             try {
-                $query->execute($this->values);
+                $query->execute();
+                
                 return $query->rowCount();
             } catch (\PDOException $e) {
-                $this->db->handleError($e, "UPDATE-EXECUTE", $this->statement);
+                $this->mydatabase->handleError($e, "UPDATE-EXECUTE", $this->statement);
             }
         }
         

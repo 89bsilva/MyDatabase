@@ -121,13 +121,13 @@ class MyDatabase
                 $user, 
                 $password, 
                 array(
-                    PDO::MYSQL_ATTR_FOUND_ROWS => true,
-                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                    PDO::MYSQL_ATTR_FOUND_ROWS   => true,
+                    PDO::ATTR_EMULATE_PREPARES   => true,
+                    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+                    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION
                 )
             );
             
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
             return true;
         } catch (PDOException $e) {
             $this->handleError($e, "CONNECT");
@@ -157,7 +157,7 @@ class MyDatabase
     public function prepareStatement($statement) 
     {
         $query = false;
-
+        echo $statement;
         if($this->connect()) {
         
             try {
@@ -175,48 +175,48 @@ class MyDatabase
      * Retorna um objeto CRUD\Insert para realizar inserção(ões)
      * 
      * @param  array  $data  Array associativo com o(s) valor(es) que será(ão) inserido(s)
-     * @return CRUD\Insert
+     * @return MyDatabase\CRUD\Insert
      */
 
-    public function insert(array $data): CRUD\Insert
+    public function insert(array $data): MyDatabase\CRUD\Insert
     {
-        return new CRUD\Insert($data, $this);
+        return new MyDatabase\CRUD\Insert($data, $this);
     } // Fim -> insert
 
     /**
      * Retorna um objeto CRUD\Select para realizar consulta(s)
      * 
      * @param string|array  $column  String|Array com a(s) coluna(s) requisitada(s) na consulta
-     * @return CRUD\Select
+     * @return MyDatabase\CRUD\Select
      */
 
-    public function select($column = "*"): CRUD\Select
+    public function select($column = "*"): MyDatabase\CRUD\Select
     {
         $column = is_array($column) ? implode(", ", $column) : $column;
-        return new CRUD\Select($column, $this);
+        return new MyDatabase\CRUD\Select($column, $this);
     } // Fim -> select
 
     /**
      * Retorna um objeto CRUD\Update para realizar atualização(ões)
      * 
      * @param string  $table  String com o nome da tabela que deverá ser atualizada.
-     * @return CRUD\Update
+     * @return MyDatabase\CRUD\Update
      */
 
-    public function update(string $table): CRUD\Update
+    public function update(string $table): MyDatabase\CRUD\Update
     {
-        return new CRUD\Update($table, $this);
+        return new MyDatabase\CRUD\Update($table, $this);
     } // Fim -> update
 
     /**
      * Retorna um objeto CRUD\Delete para realizar exclusão(ões)
      * 
      * @param string  $where  Condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
-     * @return CRUD\Delete
+     * @return MyDatabase\CRUD\Delete
      */
 
-    public function delete(string $where): CRUD\Delete
+    public function delete(string $where): MyDatabase\CRUD\Delete
     {
-        return new CRUD\Delete($where, $this);
+        return new MyDatabase\CRUD\Delete($where, $this);
     } // Fim -> delete
 } //Fim -> Class MyDatabase
