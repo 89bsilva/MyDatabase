@@ -20,12 +20,24 @@ require './vendor/autoload.php';
 ## Criando o obejto MyDatabase
 
 ###### Ao instânciar a classe você deve passar dois parâmetros:
-1) Um array com o endereço do servidor na índice 0 e o número da porta no índice 1. Támbém é possível passar uma string somente com o endereço do servidor, nesse caso o número da porta será 3306.
-2) Um array com o nome do banco no índice 0, usuário no índice 1, senha no índice 2 e o charset no índice 3. É possível informar somente o índice 0 (banco) e índice 1 (usuário) assim ficaria sem senha e charset="utf8"
+1) Um array com o endereço do servidor no índice 0 e o número da porta no índice 1. É possível passar uma string somente com o endereço do servidor, nesse caso o número da porta será 3306.
+2) Um array com o nome do banco no índice 0, usuário no índice 1, senha no índice 2, charset no índice 3, collation no índice 4 e a engine no índice 5. 
+    É possível informar somente o índice 0 (nome do banco) e o índice 1 (usuário) assim os valores para senha, charset, collation e engine serão:
+    - senha     = "" 
+    - charset   = "utf8" 
+    - collation = "general_ci" 
+    - engine    = "InnoDB" 
 
-###### Exemplo de conexão servidor: "localhost", porta: "3308", banco: "loja", usuário: "admin" senha: "123", charset: "utf8mb4"
+| Métodos da Classe MyDatabase                 | Descrição                                                                                 | 
+| -------------------------------------------- | ----------------------------------------------------------------------------------------- | 
+| table(string $tabela)                        | Inicia o processo de manipulação de tabelas; Retorna uma classe Table.                    |
+| insert(array $dados)                         | Inicia o processo de inserção de dados; Retorna uma classe Insert.                        | 
+| select(string $colunas)                      | Inicia o processo de consulta de dados; Retorna uma classe Select.                        |
+| update(string $tabela)                       | Inicia o processo de atualização de dados; Retorna uma classe Update.                     |
+| delete(string $tabela)                       | Inicia o processo de exclusão de dados; Retorna uma classe Delete.                        |
+
+###### Exemplo 1: Conexão no servidor: "localhost", porta: "3308", banco: "loja", usuário: "admin", senha: "123", charset: "utf8mb4" e engine: "MyISAM"
 ```php
-# Conexão localhost com a porta do MySQL 3308 
 $db = new MyDatabase(
     Array(
         "localhost",
@@ -35,23 +47,79 @@ $db = new MyDatabase(
         "loja", 
         "admin",
         "123",
-        "utf8mb4"
-    )
-);
-
-# Conexão localhost com a porta do MySQL 3306 
-$db2 = new MyDatabase(
-    "localhost", 
-    Array(
-        "loja", 
-        "admin",
-        "123",
-        "utf8mb4"
+        "utf8mb4",
+        "general_ci",
+        "MyISAM"
     )
 );
 ```
 
-## Operações
+###### Exemplo 2: Conexão no servidor: "localhost", porta: "3306", banco: "loja", usuário: "admin", senha: "", charset: "utf8" e engine: "InnoDB"
+
+```php
+$db = new MyDatabase(
+    "localhost", 
+    Array(
+        "loja", 
+        "admin"
+    )
+);
+```
+
+## TABLE
+
+Ao chamar o método table(string $tabela) é necessário passar uma string com o nome da tabela que será utilizada para realizar uma alteração, exclusão, criação ou consulta de colunas.
+O método retornará instância da classe Table e através desse novo objeto deverá ser realizado a manipulação.
+
+| Métodos da Classe Table                      | Descrição                                                                                  | 
+| -------------------------------------------- | ------------------------------------------------------------------------------------------ | 
+| addColumn(string $coluna)                    | String com o nome da coluna que deseja ser criada;                                         | 
+| int(int $tamanho)                            | Define o tipo: INT e tamanho: $tamanho para coluna; addColumn() DEVE ser chamada antes     |
+| varchar(int $tamanho)                        | Define o tipo: VARCHAR e tamanho: $tamanho para coluna; addColumn() DEVE ser chamada antes | 
+| text(int $tamanho)                           | Define o tipo: TEXT e tamanho: $tamanho para coluna; addColumn() DEVE ser chamada antes    | 
+| float(mixed $precisao)                       | Define o tipo: FLOAT com precisão:$precisao para coluna; addColumn() DEVE ser chamada antes| 
+| double(mixed $precisao)                      | Define o tipo: DOUBLE com precisão:$precisao para coluna;addColumn() DEVE ser chamada antes| 
+| default(mixed $valor)                        | Define o valor padrão da coluna a ser criada; addColumn() DEVE ser chamada antes           | 
+| autoIncrement()                              | Define que coluna a ser criada será auto encrementada; addColumn() DEVE ser chamada antes  | 
+| notNull()                                    | Define que coluna a ser criada não pode ser nula; addColumn() DEVE ser chamada antes       | 
+| primary()                                    | Define que coluna a ser criada será chave primária; addColumn() DEVE ser chamada antes     | 
+| unique()                                     | Define que coluna a ser criada terá valor unico; addColumn() DEVE ser chamada antes        | 
+| timestamp()                                  | Define o tipo: TIMESTAMP para coluna; addColumn() DEVE ser chamada antes                   | 
+| addTimes()                                   | Adiciona duas colunas: "created_at" e "updated_at" do tipo TIMESTAMP a tabela;             | 
+| create(bool $mostrarDeclaracao): array       | Tenta criar a tabela no banco e retorna array("message", "created","rows","statement")     | 
+| getColumns(): array                          | Retorna um array com o(s) nome(s) da(s) coluna(s) da tabela;                               | 
+| drop(): bool                                 | Retorna um TRUE se conseguiu deletar a tabela e FALSE caso contrário                       | 
+| clean(): bool                                | Retorna um TRUE se conseguiu limpar os dados da tabela e FALSE caso contrário              | 
+
+###### Exemplo 1: Cria a tabela:"cliente" com as colunas: "id", "nome", "cidade" e "CPF"
+
+```php
+$tbCliente = $db->table("cliente")->addColumn("id")->int(11)->notNull()->autoIncrement()->primary()
+                                  ->addColumn("nome")->varchar(25)->notNull()
+                                  ->addColumn("cidade")->varchar(25)->notNull()
+                                  ->addColumn("CPF")->int(11)->notNull()->unique()
+$tbCliente->create();
+```
+
+###### Exemplo 2: Cria a tabela:"produtos" com as colunas: "id", "codigo", "descricao", "preco" e "quantidade" e a tabela: "usuario" com as colunas "id", "nome", "created_at", "updated_at"
+
+```php
+$tabelas = $db->table("produtos")->addColumn("id")->int(11)->notNull()->autoIncrement()->primary()
+                                 ->addColumn("codigo")->int(11)->notNull()->unique()
+                                 ->addColumn("descricao")->varchar(100)->notNull()
+                                 ->addColumn("preco")->float("7,2")->notNull()
+                                 ->addColumn("quantidade")->int(11)->notNull()
+               ->table("usuario")->addColumn("id")->int(11)->notNull()->autoIncrement()->primary()
+                                 ->addColumn("nome")->varchar(25)->notNull()
+                                 ->addTimes();
+$tabelas->create();
+```
+
+###### Exemplo 3: Deletar a tabela: "usuario"
+
+```php
+$usuario = $db->table("usuario")->drop();
+```
 
 ##### INSERT
 
@@ -104,8 +172,8 @@ O método retornará instância da classe Select e através desse novo objeto de
 | -------------------------------------------- | ----------------------------------------------------------------------------------------- | 
 | from(string $tabela)                         | Nome da tabela em que a consulta será realizada                                           | 
 | where(string $coluna)                        | Nome da coluna que será utilizada para comparar                                           |
-| between($valor1, $valor2)                    | Retorna registro(s) dentro do intervalo entre o $valor1 e $valor2                         | 
-| notBetween($valor1, $valor2)                 | Retorna registro(s) fora do intervalo entre o $valor1 e $valor2                           |
+| between(mixed $valor1, mixed $valor2)        | Retorna registro(s) dentro do intervalo entre o $valor1 e $valor2                         | 
+| notBetween(mixed $valor1, mixed $valor2)     | Retorna registro(s) fora do intervalo entre o $valor1 e $valor2                           |
 | equals(mixed $valor)                         | Operador = será utilizado para comparar o valor informado                                 | 
 | notEquals(mixed $valor)                      | Operador != será utilizado para comparar o valor informado                                | 
 | less(mixed $valor)                           | Operador < será utilizado para comparar o valor informado                                 |
@@ -147,8 +215,8 @@ O método retornará instância da classe Update e através desse novo objeto de
 | -------------------------------------------- | ----------------------------------------------------------------------------------------- | 
 | set(array $dadosAtualizados)                 | Array associativo com o(s) dado(s) que será(ão) atualizado(s)                             |  
 | where(string $coluna)                        | Nome da coluna que será utilizada para comparar                                           |
-| between($valor1, $valor2)                    | Retorna registro(s) dentro do intervalo entre o $valor1 e $valor2                         | 
-| notBetween($valor1, $valor2)                 | Retorna registro(s) fora do intervalo entre o $valor1 e $valor2                           |
+| between(mixed $valor1, mixed $valor2)        | Retorna registro(s) dentro do intervalo entre o $valor1 e $valor2                         | 
+| notBetween(mixed $valor1, mixed $valor2)     | Retorna registro(s) fora do intervalo entre o $valor1 e $valor2                           |
 | equals(mixed $valor)                         | Operador = será utilizado para comparar o valor informado                                 | 
 | notEquals(mixed $valor)                      | Operador != será utilizado para comparar o valor informado                                | 
 | less(mixed $valor)                           | Operador < será utilizado para comparar o valor informado                                 |
@@ -166,7 +234,7 @@ O método retornará instância da classe Update e através desse novo objeto de
 | likeStart(string $valor)                     | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
 | likeEnd(string $valor)                       | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
 | likeStartEnd(string $valor1, string $valor2) | Utiliza operador LIKE e insere o coringa "%" entre valores. Ex.: $valor1%$valor2          |
-| limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 100    |  
+| limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 1      |  
 | execute(): int                               | Executa o update, retorna um int com o número de linhas que a atualização afetou          | 
 
 ###### Exemplo: Atualizar na tabela "produto" a quantidade do produto com código 123456 para 5
@@ -178,7 +246,7 @@ $atualizacao = $db->update("produto")->set($novoValor)->where("codigo")->equals(
 
 ##### DELETE
 
-Ao chamar o método delete($tabela) é necessário passar uma string com o nome da tabela onde o(s) dado(s) será(ão) excluído(s).
+Ao chamar o método delete(string $tabela) é necessário passar uma string com o nome da tabela onde o(s) dado(s) será(ão) excluído(s).
 
 coluna que será utilizada para localizar o(s) registro(s) que será(ão) deletado(s).
 O método retornará instância da classe Delete e através desse novo objeto deverá ser realizado a exclusão.
@@ -186,8 +254,8 @@ O método retornará instância da classe Delete e através desse novo objeto de
 | Métodos da Classe Delete                     | Descrição                                                                                 | 
 | -------------------------------------------- | ----------------------------------------------------------------------------------------- |  
 | where(string $coluna)                        | Nome da coluna que será utilizada para comparar                                           |
-| between($valor1, $valor2)                    | Retorna registro(s) dentro do intervalo entre o $valor1 e $valor2                         | 
-| notBetween($valor1, $valor2)                 | Retorna registro(s) fora do intervalo entre o $valor1 e $valor2                           |
+| between(mixed $valor1, mixed $valor2)        | Retorna registro(s) dentro do intervalo entre o $valor1 e $valor2                         | 
+| notBetween(mixed $valor1, mixed $valor2)     | Retorna registro(s) fora do intervalo entre o $valor1 e $valor2                           |
 | equals(mixed $valor)                         | Operador = será utilizado para comparar o valor informado                                 | 
 | notEquals(mixed $valor)                      | Operador != será utilizado para comparar o valor informado                                | 
 | less(mixed $valor)                           | Operador < será utilizado para comparar o valor informado                                 |
@@ -205,8 +273,8 @@ O método retornará instância da classe Delete e através desse novo objeto de
 | likeStart(string $valor)                     | Utiliza operador LIKE e insere o coringa "%" depois do valor. Ex.: $valor%                |
 | likeEnd(string $valor)                       | Utiliza operador LIKE e insere o coringa "%" antes do valor. Ex.: %$valor                 |
 | likeStartEnd(string $valor1, string $valor2) | Utiliza operador LIKE e insere o coringa "%" entre valores. Ex.: $valor1%$valor2          |
-| limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 100    |  
-| execute()                                    | Executa o delete, retorna um int com o número de linhas que o delete afetou               | 
+| limit(int $limite)                           | Limite da consulta. Se for passado 0 a consulta será sem limite, o limite padrão é 1      |  
+| execute(): int                               | Executa o delete, retorna um int com o número de linhas que o delete afetou               | 
 
 ###### Exemplo: Deletar na tabela "produto" o produto com código 234567
 

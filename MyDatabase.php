@@ -27,7 +27,7 @@ class MyDatabase
      *
      * @property bool|array
      */
-    protected $error = false;
+    public $error = false;
 
     /**
      * Sinaliza para o sistema interromper (se true) caso haja erro.
@@ -71,10 +71,12 @@ class MyDatabase
             $this->connectionData["port"] = $address[1];
         }
 
-        $this->connectionData["db"]       = $database[0];
-        $this->connectionData["user"]     = $database[1];
-        $this->connectionData["password"] = isset($database[2]) ? $database[2] : "";
-        $this->connectionData["charset"]  = isset($database[3])  ? $database[3]  : "utf8";
+        $this->connectionData["db"]        = $database[0];
+        $this->connectionData["user"]      = $database[1];
+        $this->connectionData["password"]  = isset($database[2])  ? $database[2]  : "";
+        $this->connectionData["charset"]   = isset($database[3])  ? $database[3]  : "utf8";
+        $this->connectionData["collation"] = isset($database[4])  ? $database[4]  : "general_ci";
+        $this->connectionData["engine"]    = isset($database[5])  ? $database[5]  : "InnoDB";
     } // Fim -> handleConnectionData
 
     /**
@@ -153,7 +155,6 @@ class MyDatabase
      * @param string  $statement  String com a declaração da consulta
      * @return PDOStatement|false
      */
-
     public function prepareStatement($statement) 
     {
         $query = false;
@@ -172,24 +173,22 @@ class MyDatabase
     } // Fim -> prepareStatement
 
     /**
-     * Retorna um objeto CRUD\Insert para realizar inserção(ões)
+     * Retorna um objeto MyDatabase\CRUD\Insert para realizar inserção(ões)
      * 
      * @param  array  $data  Array associativo com o(s) valor(es) que será(ão) inserido(s)
      * @return MyDatabase\CRUD\Insert
      */
-
     public function insert(array $data): MyDatabase\CRUD\Insert
     {
         return new MyDatabase\CRUD\Insert($data, $this);
     } // Fim -> insert
 
     /**
-     * Retorna um objeto CRUD\Select para realizar consulta(s)
+     * Retorna um objeto MyDatabase\CRUD\Select para realizar consulta(s)
      * 
      * @param string|array  $column  String|Array com a(s) coluna(s) requisitada(s) na consulta
      * @return MyDatabase\CRUD\Select
      */
-
     public function select($column = "*"): MyDatabase\CRUD\Select
     {
         $column = is_array($column) ? implode(", ", $column) : $column;
@@ -197,26 +196,43 @@ class MyDatabase
     } // Fim -> select
 
     /**
-     * Retorna um objeto CRUD\Update para realizar atualização(ões)
+     * Retorna um objeto MyDatabase\CRUD\Update para realizar atualização(ões)
      * 
      * @param string  $table  String com o nome da tabela que deverá ser atualizada.
      * @return MyDatabase\CRUD\Update
      */
-
     public function update(string $table): MyDatabase\CRUD\Update
     {
         return new MyDatabase\CRUD\Update($table, $this);
     } // Fim -> update
 
     /**
-     * Retorna um objeto CRUD\Delete para realizar exclusão(ões)
+     * Retorna um objeto MyDatabase\CRUD\Delete para realizar exclusão(ões)
      * 
      * @param string  $where  Condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
      * @return MyDatabase\CRUD\Delete
      */
-
     public function delete(string $where): MyDatabase\CRUD\Delete
     {
         return new MyDatabase\CRUD\Delete($where, $this);
     } // Fim -> delete
+
+    /**
+     * Retorna um objeto CRUD\Delete para realizar exclusão(ões)
+     * 
+     * @param string  $where  Condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
+     * @return MyDatabase\Utils\Table
+     */
+
+    public function table(string $tableName): MyDatabase\Utils\Table
+    {
+        $data = array(
+            "name"      => $this->connectionData["db"],
+            "charset"   => $this->connectionData["charset"],
+            "collation" => $this->connectionData["collation"],
+            "engine"    => $this->connectionData["engine"],
+        );
+        
+        return new MyDatabase\Utils\Table($tableName, $data, $this);
+    } // Fim -> table
 } //Fim -> Class MyDatabase

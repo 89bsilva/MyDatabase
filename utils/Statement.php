@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe com propriedadedes e metodos utilizado por mais de uma Classe dessa aplicação
+ * Classe com propriedadedes e metodos utilizado para a realização de declarações
  * 
  * @author Bruno Silva Santana <brunoss.789@gmail.com>
  */
@@ -79,9 +79,9 @@ class Statement
      * @param MyDatabase  $mydatabase  Referencia do objeto que esta criando um novo objeto dessa classe
      * @param int  $defaultLimit  Número inteiro com o limite padrão da consulta
      */
-    protected function __construct(string $init, int $defaultLimit, &$mydatabase)
+    public function __construct(string $init, int $defaultLimit, &$mydatabase)
     {
-        $this->init         = \strtoupper($init);
+        $this->init         = $init;
         $this->defaultLimit = $defaultLimit;
         $this->mydatabase   = $mydatabase;
         $this->startStatement();
@@ -90,7 +90,7 @@ class Statement
     /**
      * Inicia a montagem da declaração e passa para algumas propriedadedes os valores iniciais
      */
-    private function startStatement()
+    protected function startStatement()
     {
         $this->limit($this->defaultLimit);
         $this->statement($this->init, false);
@@ -108,14 +108,16 @@ class Statement
     /**
      * Executa o insert
      * 
-     * @return \PDOStatement  Retorna a declaração preparada para ser executada 
+     * @return \PDOStatement|bool  Retorna a declaração preparada para ser executada 
      */
-    protected function prepare(): \PDOStatement
+    protected function prepare()
     {
         $query = $this->mydatabase->prepareStatement($this->statement);
 
-        foreach ($this->values as $bind => $value) {
-            $query->bindValue($bind, $value /*, PDO::PARAM_STR*/);
+        if ($query) {
+            foreach ($this->values as $bind => $value) {
+                $query->bindValue($bind, $value /*, PDO::PARAM_STR*/);
+            }
         }
 
         return $query;

@@ -1,6 +1,6 @@
 <?php
 /**
- * Classe com propriedadedes e metodos utilizado por mais de uma Classe dessa aplicação
+ * Classe com propriedadedes e metodos utilizado para montar a cláusula WHERE
  * 
  * @author Bruno Silva Santana <brunoss.789@gmail.com>
  */
