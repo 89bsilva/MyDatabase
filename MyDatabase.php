@@ -158,7 +158,6 @@ class MyDatabase
     public function prepareStatement($statement) 
     {
         $query = false;
-        echo $statement;
         if($this->connect()) {
         
             try {

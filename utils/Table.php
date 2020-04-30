@@ -405,7 +405,6 @@ class Table extends Statement
                         $return[$table]["message"] .= "Successfully created!!!";
                         $return[$table]["created"]  = true;
                     } else {
-                        var_dump($return[$table]);
                         $return[$table]["message"] .= "Could not create table!!!";
                         $return[$table]["created"]  = false;
                     }
