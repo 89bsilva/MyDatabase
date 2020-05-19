@@ -22,6 +22,7 @@ require './vendor/autoload.php';
 Ao instânciar a classe você deve passar dois parâmetros:
 
 ```php
+<?php
 $primeiroParametro  = Array(
     [0] => "enderecoServidor"  //  Obrigatório
     [1] => "numeroDaPorta"     //  Obrigatório
@@ -31,6 +32,7 @@ $primeiroParametro = (string) "enderecoServidor"; //Nesse caso o número da port
 ```
 
 ```php
+<?php
 $segundoParametro  = Array(
     [0] => "nomeDoBanco"  //  Obrigatório
     [1] => "usuario"      //  Obrigatório
@@ -46,6 +48,7 @@ $segundoParametro  = Array(
 Criando conexão no servidor: **"localhost"**, porta: **"3308"**, banco: **"loja"**, usuário: **"admin"**, senha: **"123"**, charset: **"utf8mb4"**, collation: **"unicode_ci"** e engine: **"MyISAM"**
 
 ```php
+<?php
 $db = new MyDatabase(
     Array(
         "localhost",
@@ -65,6 +68,7 @@ $db = new MyDatabase(
 Criando conexão no servidor: **"localhost"**, porta: **"3306"**, banco: **"loja"**, usuário: **"admin"**, senha: **""**, charset: **"utf8"**, collation: **"general_ci"** e engine: **"InnoDB"**
 
 ```php
+<?php
 $db = new MyDatabase(
     "localhost", 
     Array(
@@ -129,6 +133,7 @@ Métodos da classe Table
 **@param**  string  **$coluna**  Nome da coluna que será obtida as informações
 **@return**  array
 ```php
+<?php
 // Caso a tabela ou a coluna não exista na tabela um array vazio será retornado
 // Se a coluna existir será retornado um array com as informações dessa coluna
 array(
@@ -145,6 +150,7 @@ array(
 
 **@return**  array
 ```php
+<?php
 // Caso não exista a tabela um array vazio será retornado
 // Se a tabela existir será retornado um array com as informações todas as colunas dessa tabela
 array(
@@ -275,6 +281,7 @@ Define que o valor armazenado na coluna a ser adicionada/alterada será unico na
 **@return**  array
 Obs.: **addColumn()** DEVE ser chamado antes desse método
 ```php
+<?php
 array (
     // Lista com a(s) tabela(s) que não foi(ram) criada(s)
     'error' => array (
@@ -303,6 +310,7 @@ array (
 **@return**  array
 Obs.: **addColumn()** ou **changeColumn()** DEVE ser chamado antes desse método
 ```php
+<?php
 array (
     // Lista com a(s) tabela(s) que não foi(ram) criada(s)
     'error' => array (
@@ -369,6 +377,7 @@ Remove todos os registros da tabela
     * coluna: **preferencial**, tipo: **tinyint**, tamanho: **1**, pode ter valor nulo e valor padrão 0 
 
 ```php
+<?php
 $tbCliente = $db->table("cliente")
                     ->addColumn("id")->int(11)->notNull()->autoIncrement()->primary()
                     ->addColumn("nome")->varchar(25)->notNull()
@@ -402,6 +411,7 @@ array (
     * coluna: **ativo**, tipo: **tinyint**, tamanho: **1**, pode ter valor nulo e valor padrão 1 
 
 ```php
+<?php
 $criar = $db->table("produto")
                 ->addColumn("id")->int(11)->notNull()->autoIncrement()->primary()
                 ->addColumn("codigo")->int(11)->notNull()->unique()
@@ -453,6 +463,7 @@ array (
 Deletar a tabela: "usuario"
 
 ```php
+<?php
 $deletado = $db->table("usuario")->drop();
 // Valor em $deletado em caso de sucesso
 true
@@ -474,6 +485,7 @@ true
 Cadastro de **UM** cliente na tabela "**cliente**"
 
 ```php
+<?php
 $cliente  = Array(
         "nome"   => "Nome do Vendedor",
         "cidade" => "São Paulo",
@@ -486,6 +498,7 @@ $resposta = $db->insert($cliente)->into("cliente")->execute(); // Valor em $resp
 Cadastro de **TRÊS** produtos na tabela "**produto**"
 
 ```php
+<?php
 $produtos  = Array(
     Array(
         "codigo"     => 123456,
@@ -551,6 +564,7 @@ Executa o select, retorna uma lista com os registros do SELECT ou array vazio
 Buscar na tabela "**produto**" **TODOS** os dados de produtos com **QUANTIDADE MAIOR OU IGUAL 1 e com PREÇO MENOR que R$60**  e **ordernar** por **preço**
 
 ```php
+<?php
 $produtos = $db->select("*")->from("produto")->where("quantidade")->biggerEqual(1)->and("preco")->less(60)->order("preco")->limit(0)->execute();
 // Valor em $produtos em caso de sucesso
 Array(
@@ -578,6 +592,7 @@ Array(
 Buscar na tabela "**cliente**" o **NOME** dos clientes da cidade de **São Paulo**. No máximo 100 registros (**limite padrão**).
 
 ```php
+<?php
 $clientes = $db->select("nome")->from("cliente")->where("cidade")->equals("São Paulo")->execute();
 // Valor em $clientes em caso de sucesso
 Array(
@@ -613,6 +628,7 @@ Obs.: Se esse método não for chamada antes de executar a atualização o limit
 Atualizar na tabela "**produto**" a quantidade do **produto** com **código** igual a **123456** para **4**
 
 ```php
+<?php
 $novoValor   = Array("quantidade" => 4);
 $atualizacao = $db->update("produto")->set($novoValor)->where("codigo")->equals(123456)->execute();
 // Valor em $atualizacao em caso de sucesso
@@ -642,6 +658,7 @@ Obs.: Se esse método não for chamada antes de executar a exclusão o limite pa
 Deletar na tabela "**produto**" o produto com **código igual** a **234567**
 
 ```php
+<?php
 $exclusao = $db->delete("produto")->where("codigo")->equals(234567)->execute();
 // Valor em $exclusao em caso de sucesso
 1
