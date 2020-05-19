@@ -180,20 +180,24 @@ class Statement
      * @param  string  $statement  String que será atribuida|concatenada na propriedadede $statement
      * @param  bool  $concatenate  Flag que indica se a propriedadede $statement será concatenada ou substituída
      */
-    public function statement(string $statement, bool $concatenate = true): void
+    public function statement(string $statement, bool $concatenate = true)
     {
-        $this->statement = $concatenate ? "{$this->statement} {$statement}" : $statement;
+        if ($statement) {
+            $this->statement = $concatenate ? "{$this->statement} {$statement}" : $statement;
+        }
     } // FIM -> where
     
     /**
      * Monta a cláusula LIMIT na propriedade $limit
      *
      * @param  int  $limit  Limite para consulta
+     * @param  int  $offset  Indica o início da consulta
      * @return $this 
      */
-    public function limit(int $limit)
+    public function limit(int $limit, int $offset = 0)
     {
-        $this->limit = $limit > 0 ? "LIMIT {$limit}" : "";
+        $this->limit  = $limit  > 0 ? "LIMIT {$limit}"    : "";
+        $this->limit .= $offset > 0 ? " OFFSET {$offset}" : "";
         return $this;
     } // FIM -> limit
 }

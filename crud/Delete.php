@@ -11,9 +11,9 @@ class Delete extends \MyDatabase\Utils\Where
 {
     /**
      * Coloca a referência do objeto MyDatabase na propriedade $db
-     * Indica a(s) condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
+     * Indica o nome da tabela que contém o(s) registro(s) será(ão) deletado(s)
      * 
-     * @param string  $table  Condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
+     * @param string  $table  Nome da tabela que contém o(s) registro(s) será(ão) deletado(s)
      * @param MyDatabase  $mydatabase  Referencia do objeto que esta criando um novo objeto dessa classe
      */
     public function __construct(string $table, &$mydatabase)

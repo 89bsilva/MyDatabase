@@ -23,7 +23,7 @@ class Where extends Statement
      * @param MyDatabase  $mydatabase  Referencia do objeto que esta criando um novo objeto dessa classe
      * @param int  $defaultLimit  Número inteiro com o limite padrão da consulta
      */
-    protected function __construct(string $type, int $defaultLimit, &$mydatabase)
+    public function __construct(string $type, int $defaultLimit, &$mydatabase)
     {
         parent::__construct($type, $defaultLimit, $mydatabase);
     } // FIM -> __construct
@@ -323,10 +323,11 @@ class Where extends Statement
      */
     protected function getWhere(): string
     {
+        $mount  = "";
+        
         if (isset($this->where["complete"]) && $this->where["complete"]) {
             $where  = array();
             $values = array();
-            $mount  = "";
             foreach ($this->where["column"] as $key => $column) {
                 $bind = ":{$column}_w{$key}";
                 $op   = $this->where["comparisonOperator"][$key];

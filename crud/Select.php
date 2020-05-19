@@ -70,7 +70,10 @@ class Select extends \MyDatabase\Utils\Where
         }
         $where = $this->getWhere();
 
-        $this->statement("{$where} {$this->order} {$this->limit}");
+        $this->statement($where);
+        $this->statement($this->order);
+        $this->statement($this->limit);
+        
         $query = $this->prepare();
         
         if ($query) {

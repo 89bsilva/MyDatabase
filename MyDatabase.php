@@ -62,7 +62,7 @@ class MyDatabase
      * @param  array  $database  Nome do banco de dado, usuário e charset da base de dados
      * @return void
      */
-    protected function handleConnectionData($address, array $database): void {
+    protected function handleConnectionData($address, array $database) {
         if(is_string($address)) {
             $this->connectionData["host"] = $address;
             $this->connectionData["port"] = "3306";
@@ -73,10 +73,10 @@ class MyDatabase
 
         $this->connectionData["db"]        = $database[0];
         $this->connectionData["user"]      = $database[1];
-        $this->connectionData["password"]  = isset($database[2])  ? $database[2]  : "";
-        $this->connectionData["charset"]   = isset($database[3])  ? $database[3]  : "utf8";
-        $this->connectionData["collation"] = isset($database[4])  ? $database[4]  : "general_ci";
-        $this->connectionData["engine"]    = isset($database[5])  ? $database[5]  : "InnoDB";
+        $this->connectionData["password"]  = isset($database[2]) ? $database[2] : "";
+        $this->connectionData["charset"]   = isset($database[3]) ? $database[3] : "utf8";
+        $this->connectionData["collation"] = isset($database[4]) ? $database[4] : "general_ci";
+        $this->connectionData["engine"]    = isset($database[5]) ? $database[5] : "InnoDB";
     } // Fim -> handleConnectionData
 
     /**
@@ -142,7 +142,7 @@ class MyDatabase
      *
      * @return void
      */
-    protected function disconnect(): void
+    protected function disconnect()
     {
         $this->pdo = null; 
     } // Fim -> disconnect
@@ -188,16 +188,16 @@ class MyDatabase
      * @param string|array  $column  String|Array com a(s) coluna(s) requisitada(s) na consulta
      * @return MyDatabase\CRUD\Select
      */
-    public function select($column = "*"): MyDatabase\CRUD\Select
+    public function select(string $column = "*"): MyDatabase\CRUD\Select
     {
-        $column = is_array($column) ? implode(", ", $column) : $column;
-        return new MyDatabase\CRUD\Select($column, $this);
+        $columns = $column === "*"  ? "*" : implode(", ", func_get_args());
+        return new MyDatabase\CRUD\Select($columns, $this);
     } // Fim -> select
 
     /**
      * Retorna um objeto MyDatabase\CRUD\Update para realizar atualização(ões)
      * 
-     * @param string  $table  String com o nome da tabela que deverá ser atualizada.
+     * @param string  $table  Nome da tabela que contém o(s) registro(s) será(ão) atualizado(s).
      * @return MyDatabase\CRUD\Update
      */
     public function update(string $table): MyDatabase\CRUD\Update
@@ -208,30 +208,29 @@ class MyDatabase
     /**
      * Retorna um objeto MyDatabase\CRUD\Delete para realizar exclusão(ões)
      * 
-     * @param string  $where  Condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
+     * @param string  $table  Nome da tabela que contém o(s) registro(s) será(ão) deletado(s)
      * @return MyDatabase\CRUD\Delete
      */
-    public function delete(string $where): MyDatabase\CRUD\Delete
+    public function delete(string $table): MyDatabase\CRUD\Delete
     {
-        return new MyDatabase\CRUD\Delete($where, $this);
+        return new MyDatabase\CRUD\Delete($table, $this);
     } // Fim -> delete
 
     /**
-     * Retorna um objeto CRUD\Delete para realizar exclusão(ões)
+     * Retorna um objeto MyDatabase\Utils\Table para realizar alteração(ões) na tabela $tableName
      * 
-     * @param string  $where  Condição(ões) para localizar o(s) dado(s) que será(ão) deletado(s)
+     * @param string  $tableName  Nome da tabela que deseja realizar alguma(s) alteração(ões)
      * @return MyDatabase\Utils\Table
      */
-
     public function table(string $tableName): MyDatabase\Utils\Table
     {
-        $data = array(
+        $db = array(
             "name"      => $this->connectionData["db"],
             "charset"   => $this->connectionData["charset"],
             "collation" => $this->connectionData["collation"],
             "engine"    => $this->connectionData["engine"],
         );
         
-        return new MyDatabase\Utils\Table($tableName, $data, $this);
+        return new MyDatabase\Utils\Table($tableName, $db, $this);
     } // Fim -> table
 } //Fim -> Class MyDatabase
