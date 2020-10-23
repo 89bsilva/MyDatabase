@@ -152,7 +152,7 @@ array(
 ```php
 <?php
 // Caso não exista a tabela um array vazio será retornado
-// Se a tabela existir será retornado um array com as informações todas as colunas dessa tabela
+// Se a tabela existir será retornado um array com as informações de todas as colunas dessa tabela
 array(
     0 => array(
         'Field'   => 'nome da coluna',
@@ -232,7 +232,7 @@ Define o tipo: TIMESTAMP para coluna que será adicionada ou alterada
 
 ##### _addTimes(**$ptBR**)_
 
-**@param**  bool  **$ptBR**  (Opcional) Caso seja true os nomes das tabelas serão (criado_em, atualizado_em)
+**@param**  bool  **$ptBR**  (Opcional) Caso seja true os nomes das colunas serão (criado_em, atualizado_em)
 **@return**  Objeto atual
 Obs.: **addColumn()** ou **changeColumn()** DEVE ser chamado antes desse método
 Adiciona na tabela duas colunas do tipo timestamp (created_at, updated_at).
