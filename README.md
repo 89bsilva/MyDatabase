@@ -209,12 +209,23 @@ Define o tipo: FLOAT e com precisão: $precisao para coluna que será adicionada
 Obs.: **addColumn()** ou **changeColumn()** DEVE ser chamado antes desse método 
 Define o tipo: DOUBLE e com precisão: $precisao para coluna que será adicionada ou alterada
 
-##### _text(**$tamanho**)_
+##### _text()_
 
-**@param**  int  **$tamanho**  Tamanho máximo para coluna
 **@return**  Objeto atual
 Obs.: **addColumn()** ou **changeColumn()** DEVE ser chamado antes desse método 
-Define o tipo: TEXT e tamanho: $tamanho para coluna que será adicionada ou alterada
+Define o tipo: TEXT para coluna que será adicionada ou alterada
+
+##### _mediumtext()_
+
+**@return**  Objeto atual
+Obs.: **addColumn()** ou **changeColumn()** DEVE ser chamado antes desse método 
+Define o tipo: MEDIUMTEXT para coluna que será adicionada ou alterada
+
+##### _longtext()_
+
+**@return**  Objeto atual
+Obs.: **addColumn()** ou **changeColumn()** DEVE ser chamado antes desse método 
+Define o tipo: LONGTEXT para coluna que será adicionada ou alterada
 
 ##### _varchar(**$tamanho**)_
 
@@ -418,7 +429,7 @@ $criar = $db->table("produto")
                 ->addColumn("descricao")->varchar(100)->notNull()
                 ->addColumn("preco")->float("7,2")->notNull()
                 ->addColumn("quantidade")->int(11)->notNull()
-                ->addTimes(true)
+                ->addTimes(true) // TRUE passado para criar as colunas criado_em e atualizado_em
             ->table("usuario")
                 ->addColumn("id")->int(11)->notNull()->autoIncrement()->primary()
                 ->addColumn("nome")->varchar(25)->notNull()
@@ -789,7 +800,7 @@ Obs.: **where()** e algum método de comparação "**between()**, **notBetween()
 
 ### Autor
 
-Bruno Silva Santana - <brunoss.789@gil.com> - <https://github.com/89bsilva>
+Bruno Silva Santana - <ibrunosilvas@gmail.com> - <https://github.com/ibrunosilvas>
 
 ### Licença
 
