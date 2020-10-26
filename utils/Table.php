@@ -244,14 +244,36 @@ class Table extends Statement
     /**
      * Define coluna a ser criada com o tipo TEXT e tamanho argumento $size
      *
-     * @param  int  $size  Tamanho da coluna a ser criada
      * @return $this 
      */
-    public function text(int $size = 1)
+    public function text()
     {
-        $this->setTypeAndSize("text", $size);
+        $this->setTypeAndSize("text", 0);
         return $this;
     } // FIM -> text
+    
+    /**
+     * Define coluna a ser criada com o tipo MEDIUMTEXT e tamanho argumento $size
+     *
+     * @return $this 
+     */
+    public function mediumtext()
+    {
+        $this->setTypeAndSize("mediumtext", 0);
+        return $this;
+    } // FIM -> mediumtext
+    
+    /**
+     * Define coluna a ser criada com o tipo LONGTEXT e tamanho argumento $size
+     *
+     * @return $this 
+     */
+    public function longtext()
+    {
+        $this->setTypeAndSize("longtext", 0);
+        return $this;
+    } // FIM -> longtext
+    
     
     /**
      * Define coluna a ser criada com o tipo TIMESTAMP
